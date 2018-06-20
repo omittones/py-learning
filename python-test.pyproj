@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0fc328fe-755b-455e-8539-dc1622c0e55f}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>test_modules.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|3.6</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="module\main.py" />
+    <Compile Include="module\submodule\main.py" />
+    <Compile Include="module\submodule\__init__.py" />
+    <Compile Include="module\__init__.py" />
+    <Compile Include="root_module.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test_modules.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="test_pandas.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="third_party\ext_module\main.py" />
+    <Compile Include="third_party\ext_module\__init__.py" />
+    <Compile Include="Root_Class.py" />
+    <Compile Include="Root_Main.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
+    <Content Include="module\submodule\__pycache__\main.cpython-36.pyc" />
+    <Content Include="module\submodule\__pycache__\__init__.cpython-36.pyc" />
+    <Content Include="module\__pycache__\main.cpython-36.pyc" />
+    <Content Include="module\__pycache__\__init__.cpython-36.pyc" />
+    <Content Include="python.sublime-project" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="module\" />
+    <Folder Include="module\submodule\" />
+    <Folder Include="module\submodule\__pycache__\" />
+    <Folder Include="module\__pycache__\" />
+    <Folder Include="third_party\" />
+    <Folder Include="third_party\ext_module\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
