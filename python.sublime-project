@@ -1,12 +1,34 @@
 {
-	"folders" :
+	"build_systems":
 	[
 		{
-			"file_exclude_patterns" :
+			"cmd":
+			[
+				"python",
+				"-u",
+				"$project_path\\Root_Main.py"
+			],
+			"encoding": "utf-8",
+			"file_regex": "^[ ]*File \"([^\"]*)\", line ([0-9]*), in",
+			"name": "Project - Run",
+			"shell": true,
+			"working_dir": "$"
+		},
+		{
+			"file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+			"name": "Anaconda Python Builder",
+			"selector": "source.python",
+			"shell_cmd": "\"python\" -u \"$file\""
+		}
+	],
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
 			[
 				"*.pyc"
 			],
-			"folder_exclude_patterns" :
+			"folder_exclude_patterns":
 			[
 				"__pycache__",
 				".git",
@@ -14,27 +36,14 @@
 				"_git",
 				"_svn"
 			],
-			"path" : "."
+			"path": "."
 		},
 		{
-			"file_exclude_patterns" :
+			"file_exclude_patterns":
 			[
 				"*.cache"
 			],
-			"path" : "/D/Dropbox/Private/SublimeText2.0/Data/Packages"
+			"path": "/D/Dropbox/Private/SublimeText2.0/Data/Packages"
 		}
-	],
-	"build_systems" :
-    [
-        {
-            "name" : "Project - Run",
-            // "cmd" : ["python", "--version"],
-            "cmd" : ["python", "-u", "$project_path\\Root_Main.py"],
-            // "cmd" : ["echo", "$project_path\\Root_Main.py"],
-            "shell" : true,
-            "encoding" : "utf-8",
-            "working_dir" : "$",
-            "file_regex" : "^[ ]*File \"([^\"]*)\", line ([0-9]*), in"
-        }
-    ]
+	]
 }

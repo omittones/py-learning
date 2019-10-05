@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": ".",
+		}
+	],
+	"settings": {
+
+		"files.exclude": {
+			".vs" : true,
+			"**/__pycache__":true,
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"*.user":true,
+			"*.sublime-workspace":true
+		}
+	}
+}
