@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 
 # Create your models here.
@@ -10,5 +11,5 @@ class Post(models.Model):
     def __str__(self):
         return f"Post named '{self.name}'"
 
-    # def __init__(self, *args, **kwargs):
-    #     super.__init__(self, *args, **kwargs)
+    def get_absolute_url(self):
+        return reverse('post-details', kwargs = { "post_id" : self.pk })

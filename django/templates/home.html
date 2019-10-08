@@ -9,6 +9,9 @@
 {% block content %}
 
 <h1>Homepage</h1>
+<div>
+  <a href={% url 'post-new' %}>Add new</a>
+</div>
 <ul>
   {% for post in posts %}
     <li>
@@ -16,8 +19,11 @@
         <div>
             {{post.text}}
         </div>
+        <a href="{% url 'post-details' post.id %}">Details</a>
     </li>
   {% endfor %}
 </ul>
-
+<div>
+  <a href={% url 'post-new' %}>Add new</a>
+</div>
 {% endblock content %}

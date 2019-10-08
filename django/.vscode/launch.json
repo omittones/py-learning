@@ -5,9 +5,24 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Django Attach",
+            "type": "python",
+            "request": "attach",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ],
+            "port": 8080,
+            "host": "localhost",
+            "django": true
+        },
+        {
             "name": "Python: Django",
             "type": "python",
             "request": "launch",
+            "console": "internalConsole",
             "program": "${workspaceFolder}\\manage.py",
             "args": [
                 "runserver",

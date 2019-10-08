@@ -3,8 +3,19 @@
 import os
 import sys
 
+# ENABLE_DEBUG = False
+
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trading.settings')
+
+    # if ENABLE_DEBUG:
+    #     try:
+    #         import ptvsd
+    #         ptvsd.enable_attach(address = ('localhost', 8080))
+    #         print("Started remote debugger")
+    #     except:
+    #         pass
+
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
