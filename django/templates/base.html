@@ -1,6 +1,18 @@
-<header>
-    <a href="{% url 'home' %}">Home</a> |
-    <a href="{% url 'about' %}">About</a>
-</header>
-{% block content %}
-{% endblock content %}
+{% load static %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="{% static 'base.css' %}" />
+        {% block head %}
+        {% endblock head %}
+    </head>
+    <body>
+        <header>
+            <a href="{% url 'home' %}">Home</a> |
+            <a href="{% url 'about' %}">About</a>
+        </header>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>
+

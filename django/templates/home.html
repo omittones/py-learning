@@ -1,7 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block head %}
+
+  <script src="{% static 'home.js' %}"></script>
+
+{% endblock head %}
 {% block content %}
 
 <h1>Homepage</h1>
+<ul>
+  {% for post in posts %}
+    <li>
+        <h2>{{post.name}}</h2>
+        <div>
+            {{post.text}}
+        </div>
+    </li>
+  {% endfor %}
+</ul>
 
 {% endblock content %}
