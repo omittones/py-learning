@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.http.response import HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from .models import Post
 
@@ -18,6 +19,13 @@ class PostDetailsView(DetailView):
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponse(status=200, content='')
+
+    # def setup(self, *args, **kwargs):
+    #     return super().setup(*args, **kwargs)
     # def get(self, request, *args, **kwargs):
     #     return super().get(request)
 
@@ -32,3 +40,5 @@ class UpdatePostView(UpdateView):
     model = Post
     template_name = 'post_edit.html'
     fields = ['name', 'text']
+    context_object_name = 'post'
+    pk_url_kwarg = 'post_id'

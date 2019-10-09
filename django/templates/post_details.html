@@ -1,8 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="post-entry">
-    <h2>{{post.name}}</h2>
-    <p>{{post.text}}</p>
-  </div>
+<div class="post-entry">
+  {% csrf_token %}
+  <h2>{{post.name}}</h2>
+  <p>{{post.text}}</p>
+  <a href="{% url 'post-edit' post.id %}">Edit</a>
+  <button class="delete" data-resource="{% url 'post-details' post_id=post.id %}">Delete</button>
+</div>
+<script>
+
+  var button = document.querySelector('button.delete');
+  button.addEventListener('click', function(event) {
+    var token = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    var url = this.getAttribute('data-resource');
+    var request = new XMLHttpRequest();
+    request.addEventListener('load', function(event) {
+      if (this.status == 200)
+        window.location.href = "{% url 'home' %}";
+      else {
+        alert(`Failed with status ${this.status}`);
+        document.clear();
+        document.write(this.responseText);
+      }
+    });
+    request.open('DELETE', url, true);
+    request.setRequestHeader('X-CSRFToken', token.value);
+    request.send(null);
+  });
+
+</script>
 {% endblock content %}

@@ -5,6 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Django",
+            "type": "python",
+            "request": "launch",
+            "console": "internalConsole",
+            "program": "${workspaceFolder}\\manage.py",
+            "justMyCode": false,
+            "args": [
+                "runserver",
+                "--noreload"
+            ],
+            "django": true
+        },
+        {
             "name": "Python: Django Attach",
             "type": "python",
             "request": "attach",
@@ -16,18 +29,7 @@
             ],
             "port": 8080,
             "host": "localhost",
-            "django": true
-        },
-        {
-            "name": "Python: Django",
-            "type": "python",
-            "request": "launch",
-            "console": "internalConsole",
-            "program": "${workspaceFolder}\\manage.py",
-            "args": [
-                "runserver",
-                "--noreload"
-            ],
+            "justMyCode": false,
             "django": true
         }
     ]
