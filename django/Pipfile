@@ -6,9 +6,10 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 ptvsd = "*"
+rope = "*"
 
 [packages]
-django = "*"
+django = "==2.1"
 
 [requires]
 python_version = "3.6"

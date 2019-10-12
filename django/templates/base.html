@@ -9,10 +9,15 @@
     <body>
         <header>
             <a href="{% url 'home' %}">Home</a> |
-            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'about' %}">About</a> |
+        {% if user.is_authenticated %}
+            <span>You are logged in as {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></span>
+        {% else %}
+            <span>You are not logged in.</span>
+            <a href="{% url 'login' %}">Log In</a>
+        {% endif %}
         </header>
         {% block content %}
         {% endblock content %}
     </body>
 </html>
-

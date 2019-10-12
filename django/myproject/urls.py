@@ -15,8 +15,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth.urls import urlpatterns as auth_urlpatterns
+from pages.urls import urlpatterns as pages_urlpatterns
+from .views import AutoRedirectLoginView
+
+authOverrides = list()
+for p in auth_urlpatterns:
+    if p.name == 'login':
+        authOverrides.append(path('login/', AutoRedirectLoginView.as_view(), name='login'))
+    # elif p.name == 'logout':
+    #     authOverrides.append(path('logout/', OurLogoutView.as_view(), name='logout'))
+    else:
+        authOverrides.append(p)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pages.urls'))
+    path('', include(authOverrides)), # app name, namespace
+    path('', include('pages.urls')),
 ]

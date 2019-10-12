@@ -8,14 +8,15 @@
 {% endblock head %}
 {% block content %}
 
-<h1>Homepage</h1>
+<h1>Posts</h1>
 <div>
   <a href={% url 'post-new' %}>Add new</a>
 </div>
+{% if posts %}
 <ul>
   {% for post in posts %}
     <li>
-        <h2>{{post.name}}</h2>
+        <strong>{{post.name}}</strong>
         <div>
             {{post.text}}
         </div>
@@ -26,4 +27,13 @@
 <div>
   <a href={% url 'post-new' %}>Add new</a>
 </div>
+{% endif %}
+<p>
+  Contributing usernames:
+</p>
+<ul>
+{% for user in users %}
+  <li>{{user.username}} with {{user.nm_posts}} posts</li>
+{% endfor %}
+</ul>
 {% endblock content %}

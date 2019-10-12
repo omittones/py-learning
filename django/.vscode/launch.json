@@ -5,6 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: Migrate",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}\\manage.py",
+            "console": "internalConsole",
+            "justMyCode": false,
+            "args": ["migrate"]
+        },
+        {
             "name": "Python: Django",
             "type": "python",
             "request": "launch",

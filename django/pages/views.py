@@ -1,12 +1,27 @@
+from functools import lru_cache
 from django.urls import reverse
 from django.http.response import HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
-from .models import Post
+from .models import Post, CustomUser
 
 class HomePageView(ListView):
     template_name = 'home.html'
     model = Post
     context_object_name = 'posts' # used in template to reference list of Posts
+
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super().get_context_data(*args, **kwargs)
+    #     context['users'] = users
+    #     return context
+
+    @property
+    @lru_cache(maxsize = 1)
+    def extra_context(self):
+        #convert to list to avoid reading QuerySet in template
+        users = list(CustomUser.objects.with_nm_posts())
+        return { 'users': users }
+
+
 
 
 class AboutPageView(TemplateView):
@@ -34,6 +49,9 @@ class NewPostView(CreateView):
     model = Post
     template_name = 'post_new.html'
     fields = ['name', 'text', 'author']
+
+    def get_success_url(self):
+        return reverse('home')
 
 
 class UpdatePostView(UpdateView):
