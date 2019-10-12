@@ -2,6 +2,7 @@
 
 from django.db import migrations
 from django.db.backends.base.schema import BaseDatabaseSchemaEditor
+from django.apps.registry import Apps
 from random import choice
 
 songs = [{"artist": "Safri Duo", "title": "Baya Baya"}, {"artist": "London Elektricity", "title": "Elektricity Will Keep Me Warm (SPY Remix)"}, {"artist": "Henry Green", "title": "Electric Feel (Kygo Remix)"},
@@ -24,7 +25,7 @@ songs = [{"artist": "Safri Duo", "title": "Baya Baya"}, {"artist": "London Elekt
     {"artist": "Abakus", "title": "Wasted Feeling (Kobana And Mario Hatchet Remix)"}, {"artist": "I Am The Architect", "title": "Walk In Regret"}]
 
 
-def seed(apps, schema_editor):
+def seed(apps: Apps, schema_editor: BaseDatabaseSchemaEditor):
 
     Song = apps.get_model('playlister', 'Song')
     Playlist = apps.get_model('playlister', 'Playlist')
@@ -52,7 +53,7 @@ def seed(apps, schema_editor):
             pe.save()
 
 
-def unseed(apps, schema_editor: BaseDatabaseSchemaEditor):
+def unseed(apps: Apps, schema_editor: BaseDatabaseSchemaEditor):
     schema_editor.execute("delete from playlister_song")
     schema_editor.execute("""
     delete from playlister_playlistentry
