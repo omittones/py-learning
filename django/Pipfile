@@ -7,6 +7,7 @@ verify_ssl = true
 pylint = "*"
 ptvsd = "*"
 rope = "*"
+autopep8 = "*"
 
 [packages]
 django = "==2.1"
