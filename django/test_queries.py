@@ -13,10 +13,57 @@ def setup_django():
 # pylint: disable=no-member
 
 
+def sql(queryset):
+    query = getattr(queryset, 'query', queryset)
+    print(query, '\n')
+
+
+def exc(queryset):
+    list(queryset)
+
+
+def try_to_join():
+    from playlister import models
+    from django.db.models.sql.query import LOUTER, INNER, Query, Join
+    from django.db.models.sql.datastructures import BaseTable
+    #from django.db.models.sql import Query, Join
+
+    class JoinCondition():
+        def __init__(self, *args):
+            self.join_columns = args
+
+        def get_joining_columns(self):
+            return self.join_columns
+
+        def get_extra_restriction(self, *args, **kwargs):
+            return None
+
+    # join
+    qset = models.Playlist.objects.filter(name__exact='a')
+    query: Query = qset.query
+
+    condition = JoinCondition(
+        (models.Playlist._meta.get_field('name').column,
+         models.Song._meta.get_field('title').column)
+    )
+
+    parent_alias = query.table_alias(models.Playlist._meta.db_table)[0]
+    query.join(Join(
+        table_name=models.Song._meta.db_table,
+        table_alias=None,
+        parent_alias=parent_alias,
+        join_type=LOUTER,
+        join_field=condition,
+        nullable=True
+    ))
+
+    sql(query)
+
+
 def main():
     from playlister import models
     from django.db import connection
-    from django.db.models import Manager, F, Count, Q, FilteredRelation
+    from django.db.models import F, Count, Q, FilteredRelation
     import django.db.models.functions as DbF
     from django.db.models.manager import BaseManager
 
@@ -25,13 +72,6 @@ def main():
 
     # slicing returns LimiterQuerySet, pure indexing does not
     first_playlist = playlists.all()[:1]
-
-    def sql(queryset):
-        query = getattr(queryset, 'query', queryset)
-        print(query, '\n')
-
-    def exc(queryset):
-        list(queryset)
 
     # where name like '%Seeded%'
     sql(playlists.filter(name__contains='Seeded').all())
@@ -66,46 +106,7 @@ def main():
         .union(songs.values('title', 'artist'))
     )
 
-    from django.db.models.sql.query import LOUTER, INNER, Query, Join
-    from django.db.models.sql.datastructures import BaseTable
-    #from django.db.models.sql import Query, Join
-
-    class JoinCondition():
-        def __init__(self, *args):
-            self.join_columns = args
-
-        def get_joining_columns(self):
-            return self.join_columns
-
-        def get_extra_restriction(self, *args, **kwargs):
-            return None
-
-    # join
-    qset = playlists.filter(name__exact='a')
-    query: Query = qset.query
-
-    condition = JoinCondition(
-        (models.Playlist._meta.get_field('name').column,
-         models.Song._meta.get_field('title').column)
-    )
-
-    parent_alias = query.table_alias(models.Playlist._meta.db_table)[0]
-    query.join(Join(
-        table_name=models.Song._meta.db_table,
-        table_alias=None,
-        parent_alias=parent_alias,
-        join_type=LOUTER,
-        join_field=condition,
-        nullable=True
-    ))
-
-    sql(query)
-    sql(qset)
-
-    # sql(
-    #     songs
-    #     .annotate(plist=FilteredRelation('playlists', condition=Q(id=F('id'))))
-    # )
+    try_to_join()
 
     # print all queries executed on database connection
     [print(i['sql'], '\n') for i in connection.queries]
