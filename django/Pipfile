@@ -11,7 +11,7 @@ autopep8 = "*"
 
 [packages]
 django = "==2.1"
-deezer-python = {path = "./submodules/deezer-python"}
+deezer-python = {editable = true,path = "./submodules/deezer-python"}
 
 [requires]
 python_version = "3.6"
