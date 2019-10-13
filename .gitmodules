@@ -1,0 +1,3 @@
+[submodule "django/submodules/deezer-python"]
+	path = django/submodules/deezer-python
+	url = git@github.com:browniebroke/deezer-python.git
