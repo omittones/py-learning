@@ -26,6 +26,16 @@ class PlaylistEntry(models.Model):
     playlist = models.ForeignKey(
         to='playlister.Playlist', on_delete=models.CASCADE, related_name='entries')
 
+    class Meta():
+        verbose_name = 'Playlist entry'
+        verbose_name_plural = 'Playlist entries'
+
+    # pylint: disable=no-member
+    def __str__(self):
+        self._song_artist = getattr(self, '_song_artist', self.song.artist)
+        self._song_title = getattr(self, '_song_title', self.song.title)
+        return f'{self.order}. {self._song_artist} - {self._song_title}'
+
 
 class Song(models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
