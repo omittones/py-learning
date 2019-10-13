@@ -4,5 +4,5 @@
     "python.formatting.provider": "autopep8",
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false,
-    "editor.codeLens": true,
+    "editor.codeLens": true
 }
