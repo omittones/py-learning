@@ -1,4 +1,5 @@
 from django.db import models
+from . import services
 
 
 def DefaultCharField(max_length=100, **kwargs):
@@ -17,8 +18,11 @@ class Playlist(models.Model):
     def __str__(self):
         return f"Playlist '{self.name}'"
 
+    objects = services.PlaylistManager()
+
 
 class PlaylistEntry(models.Model):
+
     id = models.AutoField(primary_key=True, auto_created=True)
     order = models.IntegerField(blank=False, null=False)
     song = models.ForeignKey(
@@ -30,11 +34,36 @@ class PlaylistEntry(models.Model):
         verbose_name = 'Playlist entry'
         verbose_name_plural = 'Playlist entries'
 
+    objects = services.PlaylistEntryManager()
+
     # pylint: disable=no-member
     def __str__(self):
         self._song_artist = getattr(self, '_song_artist', self.song.artist)
         self._song_title = getattr(self, '_song_title', self.song.title)
         return f'{self.order}. {self._song_artist} - {self._song_title}'
+
+    def order_key(self):
+        return self.order
+
+    def delete(self, *args, **kwargs):
+        entries = self.playlist.entries.all()
+        entries = [e for e in sorted(
+            entries, key=PlaylistEntry.order_key) if e.id != self.id]
+        for i, e in enumerate(entries):
+            e.order = i
+            super(PlaylistEntry, e).save()
+        return super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        entries = self.playlist.entries.all()
+        if self.order is None or kwargs.get('force_insert', False):
+            self.order = max(map(PlaylistEntry.order_key, entries), default=-1)
+            self.order += 1
+        else:
+            for i, e in enumerate(sorted(entries, key=PlaylistEntry.order_key)):
+                e.order = i
+                super(PlaylistEntry, e).save()
+        return super().save(*args, **kwargs)
 
 
 class Song(models.Model):
