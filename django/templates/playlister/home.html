@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load playlister.tags %}
 {% block head %}
 
 {% endblock head %}
@@ -9,7 +10,7 @@
 <ul class="list-unstyled">
     {% for p in playlists %}
     <li class="media my-1">
-        <img src="https://picsum.photos/128/128" class="rounded float-left mr-2 ml-1">
+        <img src="{% bust_cache 'https://picsum.photos/128/128' %}" class="rounded float-left mr-2 ml-1">
         <div class="media-body">
             <div>
                 <h5 class="mt-0 mb-1">{{p.name}}</h5>

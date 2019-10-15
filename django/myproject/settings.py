@@ -59,6 +59,9 @@ TEMPLATES = [
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': False,
         'OPTIONS': {
+            'libraries': {
+                'playlister.tags': 'playlister.tags'
+            },
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
