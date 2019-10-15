@@ -12,8 +12,7 @@ def main():
     authenticator.authenticate()
     print(authenticator.access_token)
 
-    client = deezer.Client(
-        app_id='173261', app_secret='4ba3efb12aaa0cc531e488d698404e9e')
+    client = deezer.Client(app_id=APP_ID, app_secret=APP_SECRET)
     client.access_token = authenticator.access_token
     client.follow_next_links = True
     u: deezer.User = client.get_user('me')

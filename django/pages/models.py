@@ -1,14 +1,13 @@
 from django.urls import reverse
 from django.db import models
-from django.db.models import Manager
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
-class CustomUserManager(Manager):
+class CustomUserManager(BaseUserManager):
 
     def with_nm_posts(self):
         user_meta = self.model._meta
-        post_meta = Post._meta # pylint: disable=no-member
+        post_meta = Post._meta  # pylint: disable=no-member
 
         query = f"""
             select u.*, ifnull(c.nm_posts, 0) as nm_posts
@@ -47,10 +46,11 @@ class CustomUser(AbstractUser):
 class Post(models.Model):
     name = models.CharField(max_length=200, blank=True)
     text = models.TextField()
-    author = models.ForeignKey('pages.CustomUser', on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(
+        'pages.CustomUser', on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f"Post named '{self.name}'"
 
     def get_absolute_url(self):
-        return reverse('post-details', kwargs = { "post_id" : self.pk })
+        return reverse('post-details', kwargs={"post_id": self.pk})

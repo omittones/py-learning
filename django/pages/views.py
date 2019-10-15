@@ -4,10 +4,11 @@ from django.http.response import HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
 from .models import Post, CustomUser
 
+
 class HomePageView(ListView):
-    template_name = 'home.html'
+    template_name = 'pages/home.html'
     model = Post
-    context_object_name = 'posts' # used in template to reference list of Posts
+    context_object_name = 'posts'  # used in template to reference list of Posts
 
     # def get_context_data(self, *args, **kwargs):
     #     context = super().get_context_data(*args, **kwargs)
@@ -15,21 +16,19 @@ class HomePageView(ListView):
     #     return context
 
     @property
-    @lru_cache(maxsize = 1)
+    @lru_cache(maxsize=1)
     def extra_context(self):
-        #convert to list to avoid reading QuerySet in template
+        # convert to list to avoid reading QuerySet in template
         users = list(CustomUser.objects.with_nm_posts())
-        return { 'users': users }
-
-
+        return {'users': users}
 
 
 class AboutPageView(TemplateView):
-    template_name = 'about.html'
+    template_name = 'pages/about.html'
 
 
 class PostDetailsView(DetailView):
-    template_name = 'post_details.html'
+    template_name = 'pages/post_details.html'
     model = Post
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
@@ -47,7 +46,7 @@ class PostDetailsView(DetailView):
 
 class NewPostView(CreateView):
     model = Post
-    template_name = 'post_new.html'
+    template_name = 'pages/post_new.html'
     fields = ['name', 'text', 'author']
 
     def get_success_url(self):
@@ -56,7 +55,7 @@ class NewPostView(CreateView):
 
 class UpdatePostView(UpdateView):
     model = Post
-    template_name = 'post_edit.html'
+    template_name = 'pages/post_edit.html'
     fields = ['name', 'text']
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
