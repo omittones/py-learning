@@ -20,7 +20,7 @@ class HomePageView(ListView):
     context_object_name = 'playlists'
 
     def get_queryset(self):
-        return models.Playlist.objects.as_simple_with_songs()
+        return models.Playlist.objects.with_description()
 
     def get_context_data(self, object_list=None, **kwargs):
         context = super().get_context_data(object_list=object_list, **kwargs)

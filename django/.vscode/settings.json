@@ -2,6 +2,10 @@
     "python.pythonPath": "C:\\Users\\ajuricic\\.virtualenvs\\django-eBnjWrlT\\Scripts\\python.exe",
     "python.jediEnabled": true,
     "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Args": [
+        "--max-line-length",
+        "200"
+    ],
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false,
     "editor.codeLens": true

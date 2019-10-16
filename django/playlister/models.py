@@ -19,18 +19,24 @@ class Playlist(SaveReturnsSelfMixin, models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
     name = DefaultCharField()
     source = DefaultCharField()
-    source_specific_id = DefaultCharField(
-        max_length=2000, blank=True, null=True)
+    source_specific_id = DefaultCharField(max_length=2000, blank=True, null=True)
+    entries = None
 
     def __str__(self):
         return f"Playlist '{self.name}'"
 
     objects: services.PlaylistManager = services.PlaylistManager()
 
+    def describe(self):
+        songs = getattr(self, '_description', None)
+        if songs is None:
+            songs = self.entries.filter(order__lte=2).order_by('order').select_related('song')
+        return ', '.join(map(lambda e: f'{e.song.artist} - {e.song.title}', songs))
+
     def add_songs(self, *songs):
-        for s in songs:
-            entry = PlaylistEntry(song=s, playlist=self)
-            self.entries.append(entry)
+        for song in songs:
+            entry = PlaylistEntry(song=song, playlist=self)
+            entry.save()
 
 
 class PlaylistEntry(SaveReturnsSelfMixin, models.Model):
