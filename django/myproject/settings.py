@@ -131,3 +131,5 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'pages.CustomUser'
+
+TESTING = False

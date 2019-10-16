@@ -8,7 +8,14 @@ def DefaultCharField(max_length=100, **kwargs):
     return models.CharField(max_length=max_length, **kwargs)
 
 
-class Playlist(models.Model):
+class SaveReturnsSelfMixin():
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        return self
+
+
+class Playlist(SaveReturnsSelfMixin, models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
     name = DefaultCharField()
     source = DefaultCharField()
@@ -18,10 +25,15 @@ class Playlist(models.Model):
     def __str__(self):
         return f"Playlist '{self.name}'"
 
-    objects = services.PlaylistManager()
+    objects: services.PlaylistManager = services.PlaylistManager()
+
+    def add_songs(self, *songs):
+        for s in songs:
+            entry = PlaylistEntry(song=s, playlist=self)
+            self.entries.append(entry)
 
 
-class PlaylistEntry(models.Model):
+class PlaylistEntry(SaveReturnsSelfMixin, models.Model):
 
     id = models.AutoField(primary_key=True, auto_created=True)
     order = models.IntegerField(blank=False, null=False)
@@ -52,7 +64,7 @@ class PlaylistEntry(models.Model):
         for i, e in enumerate(entries):
             e.order = i
             super(PlaylistEntry, e).save()
-        return super().delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         entries = self.playlist.entries.all()
@@ -63,10 +75,11 @@ class PlaylistEntry(models.Model):
             for i, e in enumerate(sorted(entries, key=PlaylistEntry.order_key)):
                 e.order = i
                 super(PlaylistEntry, e).save()
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+        return self
 
 
-class Song(models.Model):
+class Song(SaveReturnsSelfMixin, models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
     artist = DefaultCharField()
     album = DefaultCharField()
@@ -76,7 +89,7 @@ class Song(models.Model):
         return f"{self.artist} - {self.title}"
 
 
-class SongSource(models.Model):
+class SongSource(SaveReturnsSelfMixin, models.Model):
     id = models.AutoField(primary_key=True, auto_created=True)
     song = models.ForeignKey(to='playlister.Song',
                              on_delete=models.SET_NULL, blank=True, null=True)

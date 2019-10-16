@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
+            "name": "Current File",
             "type": "python",
             "request": "launch",
             "program": "${file}",
@@ -13,7 +13,7 @@
             "justMyCode": false
         },
         {
-            "name": "Python: Migrate",
+            "name": "Migrate",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}\\manage.py",
@@ -24,7 +24,19 @@
             ]
         },
         {
-            "name": "Python: Django",
+            "name": "Test",
+            "type": "python",
+            "request": "launch",
+            "console": "internalConsole",
+            "program": "${workspaceFolder}\\manage.py",
+            "justMyCode": false,
+            "args": [
+                "test",
+                "--debug-mode"
+            ]
+        },
+        {
+            "name": "Run",
             "type": "python",
             "request": "launch",
             "console": "internalConsole",
@@ -37,7 +49,7 @@
             "django": true
         },
         {
-            "name": "Python: Django Attach",
+            "name": "Attach",
             "type": "python",
             "request": "attach",
             "pathMappings": [

@@ -19,7 +19,8 @@ def sql(queryset):
 
 
 def exc(queryset):
-    list(queryset)
+    items = list(queryset)
+    print(items)
 
 
 def try_to_join():
