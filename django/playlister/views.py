@@ -6,11 +6,11 @@ from django.views.generic import ListView
 
 class HomePageContext():
     def __init__(self, *args, **kwargs):
-        entry = args[0] if args else None
-        self.id = entry.id if entry else kwargs.get('id', None)
-        self.name = entry.name if entry else kwargs.get('name', None)
-        if entry is not None and getattr(entry, 'songs', None):
-            self.description = ', '.join([str(s) for s in entry.songs[0:4]])
+        playlist = args[0] if args else None
+        self.id = playlist.id if playlist else kwargs.get('id', None)
+        self.name = playlist.name if playlist else kwargs.get('name', None)
+        if playlist is not None:
+            self.description = playlist.describe()
         else:
             self.description = kwargs.get('description', '')
 

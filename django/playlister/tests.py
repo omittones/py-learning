@@ -41,3 +41,5 @@ class SmokeTests(TestCase):
         response = self.client.get('/')
         self.assertContains(response, 'Test playlist 0001')
         self.assertContains(response, 'Test playlist 0002')
+        self.assertContains(response, 'Artist 3 - Song 3, Artist 4 - Song 4, Artist 5 - Song 5')
+        self.assertContains(response, 'Artist 1 - Song 1, Artist 2 - Song 2, Artist 3 - Song 3')

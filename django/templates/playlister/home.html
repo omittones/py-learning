@@ -1,23 +1,46 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load playlister.tags %}
+{% load static %}
 {% block head %}
-
+<link rel="stylesheet" href="{% static 'style.css' %}" />
 {% endblock head %}
 {% block content %}
 
-<ul class="list-unstyled">
-    {% for p in playlists %}
-    <li class="media my-1">
-        <img src="{% bust_cache 'https://picsum.photos/128/128' %}" class="rounded float-left mr-2 ml-1">
-        <div class="media-body">
-            <div>
-                <h5 class="mt-0 mb-1">{{p.name}}</h5>
-                {{p.description}}
-            </div>
-            <button type="button" class="btn btn-dark">Play</button>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-2 col-md-2 col-lg-1">
+            <ul class="list-unstyled">
+                <li>
+                    Youtube
+                </li>
+                <li>
+                    Deezer
+                </li>
+                <li>
+                    Soundcloud
+                </li>
+            </ul>
+
         </div>
-    </li>
-    {% endfor %}
-</ul>
+        <div class="col">
+            <ul class="list-unstyled">
+                {% for p in playlists %}
+                <li class="playlist media my-1">
+                    <img class="align-self-start rounded mr-2 ml-1"
+                        src="{% bust_cache 'https://picsum.photos/128/128' %}">
+                    <div class="media-body">
+                        <div>
+                            <h5 class="mt-0 mb-1">{{p.name}}</h5>
+                            <div class="font-weight-light text-truncate">
+                                {{p.description}}
+                            </div>
+                        </div>
+                        <button type="button" class="ml-1 btn btn-dark">Play</button>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock content %}

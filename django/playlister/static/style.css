@@ -1,0 +1,8 @@
+.playlist .media-body > div {
+    height: 7.5em;
+    font-size: 0.7em;
+}
+
+.media-body {
+    width: 0em; /* otherwise it expands and pushes everything down */
+}
