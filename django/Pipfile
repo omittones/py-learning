@@ -10,7 +10,7 @@ rope = "*"
 autopep8 = "*"
 
 [packages]
-django = "==2.1"
+django = ">=2.1.11"
 deezer-python = {editable = true,path = "./submodules/deezer-python"}
 
 [requires]
