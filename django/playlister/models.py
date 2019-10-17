@@ -20,12 +20,11 @@ class Playlist(SaveReturnsSelfMixin, models.Model):
     name = DefaultCharField()
     source = DefaultCharField()
     source_specific_id = DefaultCharField(max_length=2000, blank=True, null=True)
+    objects: services.PlaylistManager = services.PlaylistManager()
     entries = None
 
     def __str__(self):
         return f"Playlist '{self.name}'"
-
-    objects: services.PlaylistManager = services.PlaylistManager()
 
     def describe(self):
         songs = getattr(self, '_description', None)
@@ -52,10 +51,8 @@ class PlaylistEntry(SaveReturnsSelfMixin, models.Model):
         verbose_name = 'Playlist entry'
         verbose_name_plural = 'Playlist entries'
 
-    objects = services.PlaylistEntryManager()
-
-    # pylint: disable=no-member
     def __str__(self):
+        # pylint: disable=no-member
         self._song_artist = getattr(self, '_song_artist', self.song.artist)
         self._song_title = getattr(self, '_song_title', self.song.title)
         return f'{self.order}. {self._song_artist} - {self._song_title}'
@@ -64,6 +61,7 @@ class PlaylistEntry(SaveReturnsSelfMixin, models.Model):
         return self.order
 
     def delete(self, *args, **kwargs):
+        # pylint: disable=no-member
         entries = self.playlist.entries.all()
         entries = [e for e in sorted(
             entries, key=PlaylistEntry.order_key) if e.id != self.id]
@@ -73,6 +71,7 @@ class PlaylistEntry(SaveReturnsSelfMixin, models.Model):
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        # pylint: disable=no-member
         entries = self.playlist.entries.all()
         if self.order is None or kwargs.get('force_insert', False):
             self.order = max(map(PlaylistEntry.order_key, entries), default=-1)
