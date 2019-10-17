@@ -101,3 +101,20 @@ class SongSource(SaveReturnsSelfMixin, models.Model):
     source = DefaultCharField()
     source_specific_id = DefaultCharField(
         max_length=2000, blank=False, null=False)
+
+
+class DeezerSettings(SaveReturnsSelfMixin, models.Model):
+    id = models.SmallIntegerField(primary_key=True, editable=False)
+    access_token = models.TextField(blank=True, null=True)
+    app_id = models.CharField(max_length=200,  blank=True, null=True)
+    app_secret = models.CharField(max_length=200,  blank=True, null=True)
+
+    class Meta():
+        verbose_name = 'Deezer settings'
+        verbose_name_plural = 'Deezer settings'
+
+    def __str__(self):
+        return 'Current'
+
+    def __repr__(self):
+        return f'deezer_access_token:{self.access_token}'

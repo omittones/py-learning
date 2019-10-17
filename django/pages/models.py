@@ -1,9 +1,9 @@
 from django.urls import reverse
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, UserManager
 
 
-class CustomUserManager(BaseUserManager):
+class CustomUserManager(UserManager):
 
     def with_nm_posts(self):
         user_meta = self.model._meta

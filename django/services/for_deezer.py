@@ -1,10 +1,39 @@
-import http
-import http.client
-import http.server
 import json
+import http
+import http.server
+import http.client
+from urllib.parse import urlencode
 import threading
 import webbrowser
 from socketserver import BaseServer, TCPServer
+
+
+class DeezerOAuthSettings():
+    app_id = ''
+    app_secret = ''
+    access_code_callback = 'http://localhost:8000/deezer/receive_code'
+
+    def request_access_code_url(self):
+        qs = urlencode({
+            'app_id': self.app_id,
+            'app_secret': self.app_secret,
+            'redirect_uri': self.access_code_callback,
+            'perms': 'basic_access,email,offline_access'
+        })
+        return f'https://connect.deezer.com/oauth/auth.php?{qs}'
+
+    def get_access_token(self, access_code):
+        path = f'/oauth/access_token.php?app_id={self.app_id}&secret={self.app_secret}&code={access_code}&output=json'
+        conn = http.client.HTTPSConnection("connect.deezer.com", port=443)
+        try:
+            conn.request("GET", path)
+            r = conn.getresponse()
+            if r.status == 200:
+                token = json.loads(r.read())
+                return token.get('access_token', None)
+            return None
+        finally:
+            conn.close()
 
 
 class DeezerAuthenticator(http.server.HTTPServer):
@@ -39,8 +68,10 @@ class DeezerAuthenticator(http.server.HTTPServer):
 
     def __init__(self, app_id, app_secret):
         self.url = ('localhost', 8000)
-        self.app_id = app_id
-        self.app_secret = app_secret
+        self.settings = DeezerOAuthSettings()
+        self.settings.app_id = app_id
+        self.settings.app_secret = app_secret
+        self.settings.access_code_callback = 'http://localhost:8000/receive_code'
         self.access_code = None
         self.access_token = None
         self.engine = None
@@ -48,31 +79,18 @@ class DeezerAuthenticator(http.server.HTTPServer):
 
     def authenticate(self):
         self._serve_in_thread()
-        get_token = f'https://connect.deezer.com/oauth/auth.php?app_id={self.app_id}&redirect_uri=http://{self.url[0]}:{self.url[1]}/receive_code&perms=basic_access,email,offline_access'
+        get_token = self.settings.request_access_code_url()
         print('Opening:', get_token)
         webbrowser.open_new_tab(get_token)
         try:
             while (self.engine.is_alive()):
                 self.engine.join(0.5)
             if self.access_code is not None:
-                self.access_token = self._get_access_token()
+                self.access_token = self.settings.get_access_token(self.access_code)
 
         except KeyboardInterrupt:
             print('Aborting...')
             self.shutdown()
-
-    def _get_access_token(self):
-        path = f'/oauth/access_token.php?app_id={self.app_id}&secret={self.app_secret}&code={self.access_code}&output=json'
-        conn = http.client.HTTPSConnection("connect.deezer.com", port=443)
-        try:
-            conn.request("GET", path)
-            r = conn.getresponse()
-            if r.status == 200:
-                token = json.loads(r.read())
-                return token.get('access_token', None)
-            return None
-        finally:
-            conn.close()
 
     def _serve_in_thread(self):
         self.engine = threading.Thread(target=self.serve_forever)

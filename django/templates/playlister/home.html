@@ -29,8 +29,7 @@
             <ul class="list-unstyled">
                 {% for p in playlists %}
                 <li class="playlist media my-1">
-                    <img class="align-self-start rounded mr-2 ml-1"
-                        src="{% bust_cache 'https://picsum.photos/128/128' %}">
+                    <img class="align-self-start rounded mr-2 ml-1" src="{% bust_cache p.thumbnail_url %}">
                     <div class="media-body">
                         <div>
                             <h5 class="mt-0 mb-1">{{p.name}}</h5>
